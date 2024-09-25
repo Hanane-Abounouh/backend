@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Notifications\InvitationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Events\ProjetInvité; 
+use App\Events\ProjetInvite; 
 
 class ProjetController extends Controller
 {

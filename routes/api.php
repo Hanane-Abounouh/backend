@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProjetController;
 use App\Http\Controllers\UtilisateurProjetController;
-use App\Http\Controllers\TâcheController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\FichierController;
@@ -38,13 +38,13 @@ Route::delete('/projets/{projetId}/utilisateurs/{utilisateurId}', [UtilisateurPr
 
 
 Route::apiResource('taches', TâcheController::class);
-Route::post('taches/{id}/assigner', [TâcheController::class, 'assignerTâche']);
+Route::post('taches/{id}/assigner', [TâcheController::class, 'AssignedTask']);
 Route::get('/projets/{projectId}/taches', [TâcheController::class, 'tasksByProject']);
 
 
 Route::apiResource('/commentaires', CommentaireController::class);
 
-Route::get('/tâches/{tâcheId}/commentaires', [CommentaireController::class, 'index']);
+Route::get('/Task/{TaskId}/commentaires', [CommentaireController::class, 'index']);
 Route::apiResource('fichiers', FichierController::class);
 Broadcast::channel('user.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id; // Autoriser uniquement l'utilisateur authentifié à écouter son propre canal

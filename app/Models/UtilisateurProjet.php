@@ -14,10 +14,13 @@ class UtilisateurProjet extends Model
 
     protected $fillable = ['utilisateur_id', 'projet_id', 'role_id', 'invitation_acceptee'];
 
-    public function utilisateur()
-    {
-        return $this->belongsTo(User::class, 'utilisateur_id');
-    }
+  // app/Models/UtilisateurProjet.php
+
+public function utilisateur()
+{
+    return $this->belongsTo(User::class, 'utilisateur_id'); // Assurez-vous que 'utilisateur_id' est correct
+}
+
 
     public function projet()
     {

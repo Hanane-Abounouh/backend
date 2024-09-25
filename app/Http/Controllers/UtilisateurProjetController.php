@@ -52,11 +52,12 @@ class UtilisateurProjetController extends Controller
     public function listUtilisateurs($projetId)
     {
         $projet = Projet::findOrFail($projetId);
-
         $utilisateurs = $projet->utilisateurs()->withPivot('role_id', 'invitation_acceptee')->get();
-
+        
         return response()->json(['utilisateurs' => $utilisateurs]);
     }
+    
+    
 
     // Supprimer un utilisateur d'un projet
     public function deleteUtilisateur(Request $request, $projetId, $utilisateurId)

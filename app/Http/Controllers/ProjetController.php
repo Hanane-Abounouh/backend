@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Projet;
 use App\Models\UtilisateurProjet;
-use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InvitationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
+use App\Events\ProjetInvité; 
 
 class ProjetController extends Controller
 {
     // Créer un projet
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -40,13 +39,31 @@ class ProjetController extends Controller
 
         return response()->json(['message' => 'Projet créé avec succès', 'projet' => $projet], 201);
     }
-
-    // Lister tous les projets
     public function index()
     {
-        $projets = Projet::all();
-        return response()->json($projets, 200);
+        $allProjets = Projet::with('utilisateur')->get(); // Chargement des utilisateurs
+        return response()->json($allProjets, 200);
     }
+    
+    public function userProjets()
+    {
+        $userProjets = Projet::with('utilisateur')
+            ->where('créé_par', Auth::id())
+            ->get();
+    
+        return response()->json($userProjets, 200);
+    }
+    
+    // Dans votre ProjetController
+public function utilisateurs($projetId)
+{
+    $projet = Projet::findOrFail($projetId);
+    $utilisateurs = $projet->utilisateurs()->withPivot('role_id', 'invitation_acceptee')->get();
+
+    return response()->json(['utilisateurs' => $utilisateurs]);
+}
+
+    
 
     // Voir un projet spécifique
     public function show($id)
@@ -88,25 +105,33 @@ class ProjetController extends Controller
         return response()->json(['message' => 'Projet supprimé avec succès'], 200);
     }
 
-    // Inviter un utilisateur à un projet
+
     public function inviteUser(Request $request, $projectId)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-        ]);
+{
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+    ]);
 
-        $projet = Projet::findOrFail($projectId);
-        $user = User::findOrFail($request->user_id);
+    $projet = Projet::findOrFail($projectId);
+    $user = User::where('email', $request->email)->firstOrFail();
 
-        // Inviter l'utilisateur avec le rôle "Invité" avec role_id 3
-        UtilisateurProjet::updateOrCreate(
-            ['utilisateur_id' => $user->id, 'projet_id' => $projet->id],
-            ['role_id' => 3] // 3 est l'ID du rôle "Invité"
-        );
+    UtilisateurProjet::updateOrCreate(
+        ['utilisateur_id' => $user->id, 'projet_id' => $projet->id],
+        ['role_id' => 3] // Assurez-vous que c'est le bon rôle
+    );
 
-        // Envoyer une notification à l'utilisateur
-        $user->notify(new InvitationNotification($projet));
+    // Diffuser l'événement
+    broadcast(new ProjetInvité($projet, $user->id));
 
-        return response()->json(['message' => 'Utilisateur invité avec succès'], 200);
-    }
+    // Envoyer la notification
+    $user->notify(new InvitationNotification($projet));
+
+    return response()->json(['message' => 'Utilisateur invité avec succès'], 200);
+}
+
+    
+  
+  
+
+    
 }

@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Hash; // Import du Hash ici
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
     use HasFactory, HasApiTokens, Notifiable;
 
-    // Attributs remplissables
     protected $fillable = [
         'name',
         'email',
@@ -21,13 +20,11 @@ class User extends Authenticatable
         'avatar',
     ];
 
-    // Attributs protégés contre l'exposition
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // Attributs castés en types
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
@@ -46,13 +43,10 @@ class User extends Authenticatable
     
         return $avatar;
     }
-    
-    
 
     // Mutator pour le mot de passe
     public function setPasswordAttribute($value)
     {
-        // Utilisation de Hash pour sécuriser le mot de passe
         $this->attributes['password'] = Hash::make($value);
     }
 
@@ -60,5 +54,21 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Relation avec les tâches créées par l'utilisateur.
+     */
+    public function tachesCrees()
+    {
+        return $this->hasMany(Tâche::class, 'créé_par'); // Les tâches créées par l'utilisateur
+    }
+
+    /**
+     * Relation avec les tâches assignées à l'utilisateur.
+     */
+    public function tachesAssignees()
+    {
+        return $this->hasMany(Tâche::class, 'assigné_a'); // Les tâches assignées à l'utilisateur
     }
 }

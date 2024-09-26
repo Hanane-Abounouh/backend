@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ProjetController;
 use App\Http\Controllers\UtilisateurProjetController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TacheController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\FichierController;
@@ -37,9 +37,10 @@ Route::delete('/projets/{projetId}/utilisateurs/{utilisateurId}', [UtilisateurPr
 
 
 
-Route::apiResource('taches', TâcheController::class);
-Route::post('taches/{id}/assigner', [TâcheController::class, 'AssignedTask']);
-Route::get('/projets/{projectId}/taches', [TâcheController::class, 'tasksByProject']);
+Route::apiResource('taches', TacheController::class);
+Route::post('taches/{id}/assigner', [TacheController::class, 'assignTask']);
+Route::get('/projets/{projetId}/taches', [TacheController::class, 'tasksByProject']);
+
 
 
 Route::apiResource('/commentaires', CommentaireController::class);

@@ -39,7 +39,7 @@ class User extends Authenticatable
         $letters = strtoupper(substr($this->name, 0, 2));
         $avatar = "https://ui-avatars.com/api/?name={$letters}&background=random";
         $this->attributes['avatar'] = $avatar;
-        $this->save();
+        $this->save();  // Save avatar if it wasn't set initially
     
         return $avatar;
     }
@@ -61,7 +61,7 @@ class User extends Authenticatable
      */
     public function tachesCrees()
     {
-        return $this->hasMany(Tâche::class, 'créé_par'); // Les tâches créées par l'utilisateur
+        return $this->hasMany(Tache::class, 'cree_par'); // Les tâches créées par l'utilisateur
     }
 
     /**
@@ -69,6 +69,6 @@ class User extends Authenticatable
      */
     public function tachesAssignees()
     {
-        return $this->hasMany(Tâche::class, 'assigné_a'); // Les tâches assignées à l'utilisateur
+        return $this->hasMany(Tache::class, 'assigne_a'); // Les tâches assignées à l'utilisateur
     }
 }

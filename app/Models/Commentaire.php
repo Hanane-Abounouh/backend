@@ -10,11 +10,11 @@ class Commentaire extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['contenu', 'tâche_id', 'utilisateur_id'];
+    protected $fillable = ['contenu', 'tache_id', 'utilisateur_id'];
 
-    public function tâche()
+    public function tache()
     {
-        return $this->belongsTo(Tâche::class);
+        return $this->belongsTo(Tache::class);
     }
 
     public function utilisateur()

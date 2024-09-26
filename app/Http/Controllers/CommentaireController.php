@@ -9,25 +9,25 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentaireController extends Controller
 {
-    // Créer un nouveau commentaire
     public function store(Request $request)
     {
         // Validation des données
         $request->validate([
             'contenu' => 'required|string',
-            'tâche_id' => 'required|exists:taches,id', // Assurez-vous que le nom est correct
+            'tache_id' => 'required|exists:taches,id', // Utilisez 'tache_id' sans accent
         ]);
     
         // Création du commentaire
         $commentaire = Commentaire::create([
             'contenu' => $request->contenu,
-            'tâche_id' => $request->tâche_id, // Vérifiez que c'est bien 'tâche_id' en base de données
+            'tache_id' => $request->tache_id, // Vérifiez que c'est bien 'tache_id' en base de données
             'utilisateur_id' => Auth::id(), // L'utilisateur connecté
         ]);
     
         // Retourner une réponse JSON
         return response()->json(['message' => 'Commentaire ajouté avec succès.', 'commentaire' => $commentaire], 201);
     }
+    
     
     
     // Lister les commentaires d'une tâche

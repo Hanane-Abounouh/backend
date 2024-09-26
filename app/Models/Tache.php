@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tâche extends Model
+class Tache extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'titre', 'description', 'date_limite', 'statut', 'priorité', 'projet_id', 'assigné_a', 'créé_par',
+        'titre', 'description', 'date_limite', 'statut', 'priorite', 'projet_id', 'assigne_a', 'cree_par',
     ];
 
     /**
      * Relation avec l'utilisateur assigné à la tâche.
      */
-    public function utilisateur()
+    public function utilisateurAssigne()
     {
-        return $this->belongsTo(User::class, 'assigné_a');
+        return $this->belongsTo(User::class, 'assigne_a');
     }
 
     /**
@@ -34,7 +34,7 @@ class Tâche extends Model
      */
     public function createur()
     {
-        return $this->belongsTo(User::class, 'créé_par');
+        return $this->belongsTo(User::class, 'cree_par');
     }
 
     /**
@@ -42,6 +42,6 @@ class Tâche extends Model
      */
     public function commentaires()
     {
-        return $this->hasMany(Commentaire::class, 'tâche_id'); // Assurez-vous que 'tâche_id' correspond à votre colonne dans la table des commentaires
+        return $this->hasMany(Commentaire::class, 'tache_id'); // Assurez-vous que 'tache_id' correspond à votre colonne dans la table des commentaires
     }
 }

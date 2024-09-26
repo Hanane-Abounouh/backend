@@ -10,7 +10,7 @@ class CreateCommentairesTable extends Migration
         Schema::create('commentaires', function (Blueprint $table) {
             $table->id();
             $table->text('contenu');
-            $table->foreignId('tâche_id')->constrained('tâches')->onDelete('cascade'); // Référence à 'tâches'
+            $table->foreignId('tache_id')->constrained('taches')->onDelete('cascade'); // Référence à 'tâches'
             $table->foreignId('utilisateur_id')->constrained('users')->onDelete('cascade'); // Référence à 'users'
             $table->timestamps();
         });

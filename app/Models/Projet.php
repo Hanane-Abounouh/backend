@@ -1,12 +1,10 @@
 <?php
-// app/Models/Projet.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User; // Assurez-vous que cette ligne est présente en haut du fichier Projet.php
-
+use App\Models\User;
 
 class Projet extends Model
 {
@@ -19,19 +17,14 @@ class Projet extends Model
         return $this->belongsTo(User::class, 'créé_par');
     }
     
-
     public function taches()
     {
         return $this->hasMany(Tache::class);
     }
- 
 
-public function utilisateurs()
-{
-    return $this->belongsToMany(User::class, 'utilisateur_projet', 'projet_id', 'utilisateur_id')->withPivot('role_id', 'invitation_acceptee');
-}
-
-
-
-    
+    public function utilisateurs()
+    {
+        return $this->belongsToMany(User::class, 'utilisateur_projet', 'projet_id', 'utilisateur_id')
+            ->withPivot('role_id', 'invitation_acceptee');
+    }
 }
